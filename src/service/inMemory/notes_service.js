@@ -1,3 +1,5 @@
+const {nanoid} = require('nanoid');
+
 class NotesService {
     constructor() {
         this._notes = [];
@@ -43,7 +45,7 @@ class NotesService {
             throw new Error("Gagal memperbarui, catatan tidak ditemukan");
             
         }
-        const updatedAt = Date().toISOString();
+        const updatedAt = Date().toString();
 
         this._notes[index] = {
             ...this._notes[index],
