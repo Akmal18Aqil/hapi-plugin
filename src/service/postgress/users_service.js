@@ -4,6 +4,8 @@ const { nanoid } = require('nanoid');
 
 const InvariantError  = require('../../exceptions/invariant_error');
 const NotFoundError = require('../../exceptions/not_found_error');
+const AuthenticationError = require("../../exceptions/authentication_error");
+
 
 class UsersService {
   constructor() {
@@ -48,26 +50,26 @@ class UsersService {
     }
     return result.rows[0];
   }
-  // async verifyUserCredential(username, password) {
-  //   const query = {
-  //     text: "SELECT id, password FROM users WHERE username = $1",
-  //     values: [username],
-  //   };
-  //   const result = await this._pool.query(query);
+  async verifyUserCredential(username, password) {
+    const query = {
+      text: "SELECT id, password FROM users WHERE username = $1",
+      values: [username],
+    };
+    const result = await this._pool.query(query);
 
-  //   if (!result.rows.length) {
-  //     throw new AuthenticationError("Kredensial yang Anda berikan salah");
-  //   }
+    if (!result.rows.length) {
+      throw new AuthenticationError("Kredensial yang Anda berikan salah");
+    }
 
-  //   const { id, password: hashedPassword } = result.rows[0];
+    const { id, password: hashedPassword } = result.rows[0];
 
-  //   const match = await bcrypt.compare(password, hashedPassword);
+    const match = await bcrypt.compare(password, hashedPassword);
 
-  //   if (!match) {
-  //     throw new AuthenticationError("Kredensial yang Anda berikan salah");
-  //   }
-  //   return id;
-  // }
+    if (!match) {
+      throw new AuthenticationError("Kredensial yang Anda berikan salah");
+    }
+    return id;
+  }
 
   // async getUsersByUsername(username) {
   //   const query = {
